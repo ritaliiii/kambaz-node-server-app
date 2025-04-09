@@ -1,14 +1,14 @@
 import * as enrollmentDao from "./dao.js";
 export default function EnrollmentRoutes(app) {
-    app.post("/enrollments/enroll", (req, res) => {
+    app.post("/enrollments/enroll", async (req, res) => {
         const { userId, courseId } = req.body;
-        const enrollment = enrollmentDao.enrollUserInCourse(userId, courseId);
+        const enrollment = await enrollmentDao.enrollUserInCourse(userId, courseId);
         res.json(enrollment);
       });
     // Unenroll a user from a course
-app.post("/enrollments/unenroll", (req, res) => {
+app.post("/enrollments/unenroll", async (req, res) => {
     const { userId, courseId } = req.body;
-    const result = enrollmentDao.unenrollUserFromCourse(userId, courseId);
+    const result = await enrollmentDao.unenrollUserFromCourse(userId, courseId);
     res.json(result);
   });
   
@@ -18,4 +18,16 @@ app.post("/enrollments/unenroll", (req, res) => {
     const enrollments = enrollmentDao.findEnrollmentsByUser(userId);
     res.json(enrollments);
   });
+
+  app.get("/api/test/courses/:userId", async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const courses = await findCoursesForUser(userId);
+      res.json(courses);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: "Failed to fetch courses" });
+    }
+  });
+
 }
