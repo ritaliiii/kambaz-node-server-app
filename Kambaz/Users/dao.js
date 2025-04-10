@@ -6,8 +6,9 @@ export const findAllUsers = () => model.find();
 export const findUserById = (userId) => model.findById(userId);
 export const findUserByUsername = (username) => model.findOne({userame:username});
 export const findUserByCredentials = async (username, password) => {
+  console.log(username, password);
   const res = await model.findOne({username, password});
-  console.log(res);
+  console.log("user, ", res);
   return res;
 }
 export const updateUser = (userId, user) => model.updateOne({_id: userId}, {$set:user});
